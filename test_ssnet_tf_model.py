@@ -25,7 +25,8 @@ unet.load( "ssnet_tf_data_plane0.npy", sess )
 export_dir = "export"
 
 # run it
-pred = sess.run(unet.get_output(), feed_dict={data_node:blank})
+pred_np = sess.run(unet.get_output(), feed_dict={data_node:blank})
+pred_tf = tf.convert_to_tensor( pred_np, tf.float32 )
 
 # save the model (for serving?)
-tf.saved_model.simple_save( sess, "SaveModelSSNet", inputs={"uplane":data_node}, outputs={"ussnet":pred} )
+tf.saved_model.simple_save( sess, "SaveModelSSNet", inputs={"uplane":data_node}, outputs={"pred":pred_tf} )
