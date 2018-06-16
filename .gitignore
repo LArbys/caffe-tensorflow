@@ -8,3 +8,5 @@
 # Python cache
 *.pyc
 
+*~
+*.npy
