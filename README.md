@@ -16,7 +16,7 @@ Tests:
 * "converts", that is successfully dumps out network and data file
 * still need to verify that converted network and original network output similar values.
 
-Cruft for larbys (remove if making pull request back to mothership):
+Cruft in the larbys branch (remove if making pull request back to mothership):
 * deploy.prototxt: SSNet (paper version)
 * run_test_convert.sh: reminder how to run code
 * setup_pycaffe.sh: setup env on meitner
