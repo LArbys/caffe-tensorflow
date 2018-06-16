@@ -64,7 +64,7 @@ class Network(object):
             with tf.variable_scope(op_name, reuse=True):
                 pardict = data_dict[op_name]
                 if type(pardict) is not dict:
-                    except ValueError("WARNING: parameter dictionary for %s is not well formed. Often due to conversion for unsupported caffe layer."%(op_name))
+                    raise ValueError("WARNING: parameter dictionary for %s is not well formed. Often due to conversion for unsupported caffe layer."%(op_name))
                 for param_name, data in pardict.iteritems():
                     try:
                         var = tf.get_variable(param_name)
