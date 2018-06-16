@@ -2,6 +2,30 @@
 
 Convert [Caffe](https://github.com/BVLC/caffe/) models to [TensorFlow](https://github.com/tensorflow/tensorflow).
 
+## Lineage/Update notes
+
+This is a fork of [version by philkuz](https://github.com/philkuz/caffe-tensorflow) which is a fork of the original repo by [ethereon](https://github.com/ethereon/caffe-tensorflow).
+* philkuz implemented group Convolution and added pieces for group Deconvolution
+* this fork further implements group Deconvolution so that it can run
+
+To do:
+* right now, using hacky way of handling padding. Need more robust way to determine 'SAME','VALID','FULL' padding from parameter proto. Our need is only for 'SAME' (output=input*stride) so that is only the only padding option currently. Our prototxt asks for padding = 1. I am worried about that causing some weird offset issue.
+* make pull request back to ethereon/philkuz?
+
+Tests:
+* "converts", that is successfully dumps out network and data file
+* still need to verify that converted network and original network output similar values.
+
+Cruft for larbys (remove if making pull request back to mothership):
+* deploy.prototxt: SSNet (paper version)
+* run_test_convert.sh: reminder how to run code
+* setup_pycaffe.sh: setup env on meitner
+* test_ssnet_tf_model.py: runs converted model
+* not included: ssnet weight files (filenames look like segmentation_pixelwise_ikey_plane[X]_iter_[Y].caffemodel
+* note: `run_Test_convert.sh` script dumps out generic names, need to change code and data file to run in `test_ssnet_tf_model.py`
+
+Rest of README unchanged.
+
 ## Usage
 
 Run `convert.py` to convert an existing Caffe model to TensorFlow.

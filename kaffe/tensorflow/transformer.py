@@ -26,6 +26,13 @@ def get_padding_type(kernel_params, input_shape, output_shape):
     v_o_w = np.ceil((input_shape.width - k_w + 1.0) / float(s_w))
     if (output_shape.height == v_o_h) and (output_shape.width == v_o_w):
         return 'VALID'
+
+    # for deconv: SAME, VALID, FULL. Only implementing same
+    ds_o_h = input_shape.height*s_h
+    ds_o_w = input_shape.width*s_w
+    if output_shape.height==ds_o_h and output_shape.width==ds_o_w:
+        return 'SAME'
+    
     return None
 
 
@@ -285,7 +292,11 @@ class TensorFlowTransformer(object):
                     NodeKind.Convolution: (2, 3, 1, 0),
 
                     # (c_o, c_i) -> (c_i, c_o)
-                    NodeKind.InnerProduct: (1, 0)
+                    NodeKind.InnerProduct: (1, 0),
+
+                    # (c_i, c_o, h, w) -> (h, w, c_o, c_i)
+                    NodeKind.Deconvolution: (2, 3, 1, 0),
+                    
                 }),
 
                 # Pre-process batch normalization data

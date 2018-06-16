@@ -121,7 +121,7 @@ class DataReshaper(object):
             if node.kind not in self.reshaped_node_types:
                 # Check for 2+ dimensional data
                 if any(len(tensor.shape) > 1 for tensor in node.data):
-                    print_stderr('Warning: parmaters not reshaped for node: {}'.format(node))
+                    print_stderr('Warning: parmaters not reshaped for node: {}'.format(node)+" node types=%s"%(str(self.reshaped_node_types)))
                 continue
             transpose_order = self.map(node.kind)
             weights = node.data[0]
@@ -274,7 +274,7 @@ class ParameterNamer(object):
         for node in graph.nodes:
             if node.data is None:
                 continue
-            if node.kind in (NodeKind.Convolution, NodeKind.InnerProduct):
+            if node.kind in (NodeKind.Convolution, NodeKind.Deconvolution,NodeKind.InnerProduct):
                 names = ('weights',)
                 if node.parameters.bias_term:
                     names += ('biases',)
