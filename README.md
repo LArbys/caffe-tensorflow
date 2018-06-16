@@ -5,8 +5,8 @@ Convert [Caffe](https://github.com/BVLC/caffe/) models to [TensorFlow](https://g
 ## Lineage/Update notes
 
 This is a fork of [version by philkuz](https://github.com/philkuz/caffe-tensorflow) which is a fork of the original repo by [ethereon](https://github.com/ethereon/caffe-tensorflow).
-* philkuz implemented group Convolution and added pieces for group Deconvolution
-* this fork further implements group Deconvolution so that it can run
+* philkuz implemented the first pieces for group Deconvolution
+* this fork further implements group Deconvolution so that it can convert our group's network
 
 To do:
 * right now, using hacky way of handling padding. Need more robust way to determine 'SAME','VALID','FULL' padding from parameter proto. Our need is only for 'SAME' (output=input*stride) so that is only the only padding option currently. Our prototxt asks for padding = 1. I am worried about that causing some weird offset issue.
