@@ -20,7 +20,8 @@ Cruft in the larbys branch (remove if making pull request back to mothership):
 * deploy.prototxt: SSNet (paper version)
 * run_test_convert.sh: reminder how to run code
 * setup_pycaffe.sh: setup env on meitner
-* test_ssnet_tf_model.py: runs converted model
+* save_ssnet_tf_model.py: runs converted model and saves it to TF pb format
+* test_saved_model.py: runs converted model using predictor util
 * not included: ssnet weight files (filenames look like segmentation_pixelwise_ikey_plane[X]_iter_[Y].caffemodel
 * note: `run_Test_convert.sh` script dumps out generic names, need to change code and data file to run in `test_ssnet_tf_model.py`
 
