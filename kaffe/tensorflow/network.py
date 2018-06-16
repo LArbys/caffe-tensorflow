@@ -61,24 +61,17 @@ class Network(object):
         '''
         data_dict = np.load(data_path).item()
         for op_name in data_dict:
-            print "opname: ",op_name,type(op_name)
             with tf.variable_scope(op_name, reuse=True):
                 pardict = data_dict[op_name]
-                print "  pardict: ",type(pardict)
-                if type(pardict) is dict:
-                    for param_name, data in pardict.iteritems():
-                        print "    par: ",param_name, data.shape
-                        try:
-                            var = tf.get_variable(param_name)
-                            session.run(var.assign(data))
-                        except ValueError:
-                            if not ignore_missing:
-                                raise
-                elif type(pardict) is list:
-                    print "pardict is a list of len=",len(pardict)
-                    for i in pardict:
-                        print type(i),i.shape
-                    raise
+                if type(pardict) is not dict:
+                    except ValueError("WARNING: parameter dictionary for %s is not well formed. Often due to conversion for unsupported caffe layer."%(op_name))
+                for param_name, data in pardict.iteritems():
+                    try:
+                        var = tf.get_variable(param_name)
+                        session.run(var.assign(data))
+                    except ValueError:
+                        if not ignore_missing:
+                            raise
                                 
 
     def feed(self, *args):
@@ -184,8 +177,8 @@ class Network(object):
         out_h = utils.deconv_output_length(input_shape[1].value, k_h, 1, s_h)
         out_w = utils.deconv_output_length(input_shape[2].value, k_w, 1, s_w)
         out_shape = [ input_shape[0].value, out_h, out_w, c_o/group  ]
-        print "deconv: c_i=%d -> c_o=%d"%(c_i,c_o)," padding=",padding
-        print "out(h,w): ",out_h,out_w
+        #print "deconv: c_i=%d -> c_o=%d"%(c_i,c_o)," padding=",padding
+        #print "out(h,w): ",out_h,out_w
         deconv = lambda i, k: tf.nn.conv2d_transpose(i, k, output_shape=out_shape, strides=stride_shape, padding=padding)
         with tf.variable_scope(name) as scope:
             kernel = self.make_var('weights', shape=[k_h, k_w, c_o/group, c_i])
@@ -193,14 +186,13 @@ class Network(object):
                 # This is the common-case. Convolve the input without any further complications.
                 output = deconv(input, kernel)
             else:
-                #raise NotImplementedError('Multiple groups not supported for deconvolution operations')
                 # Split the input into groups and then convolve each of them independently
-                print "input: ",input.get_shape()
-                print "kernel: ",kernel.get_shape()
+                #print "input: ",input.get_shape()
+                #print "kernel: ",kernel.get_shape()
                 input_groups  = tf.split( input,  num_or_size_splits=group, axis=3 )
                 kernel_groups = tf.split( kernel, num_or_size_splits=group, axis=3 )
-                print "grouped input: ",input_groups[0].get_shape()
-                print "grouped kernel: ",kernel_groups[0].get_shape()
+                #print "grouped input: ",input_groups[0].get_shape()
+                #print "grouped kernel: ",kernel_groups[0].get_shape()
                 output_groups = [deconv(i, k) for i, k in zip(input_groups, kernel_groups)]
                 # Concatenate the groups
                 output = tf.concat(output_groups,axis=3)
