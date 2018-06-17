@@ -7,7 +7,7 @@ from ssnet_tf_code_plane0 import UResNet
 
 data_p0 = np.load("ssnet_tf_data_plane0.npy")
 
-data_node = tf.placeholder(tf.float32,shape=(1, 512, 512, 1))
+data_node = tf.placeholder(tf.float32,shape=[None, 512, 512, 1])
 
 unet = UResNet({'data': data_node},trainable=False)
 print "Net defined"
