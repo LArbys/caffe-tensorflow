@@ -9,14 +9,15 @@ tload = time.time()-tload
 print "Time to load predictor: ",tload,"secs"
 
 niters = 10
+batch_size = 8
 
 trun = time.time()
 for i in range(niters):
-    blank = np.random.rand(1,512,512,1).astype(np.float32)
+    blank = np.random.rand(batch_size,512,512,1).astype(np.float32)
     pred = predict_fn( {"uplane":blank })
     diff = np.sum( pred["pred"]-blank )
     print "iter ",i,pred["pred"].shape,"diff=",diff
 
 trun = time.time()-trun
 print "Time for %d iterations: "%(niters),trun,"secs"
-print "Time for one prediction: ",trun/float(niters),"secs"
+print "Time for one batch (size=%d) prediction: "%(batch_size),trun/float(niters),"secs/batch  ",trun/float(niters*batch_size),"secs/img"
