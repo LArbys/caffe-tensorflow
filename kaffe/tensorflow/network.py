@@ -176,7 +176,7 @@ class Network(object):
         input_shape = input.get_shape()
         out_h = utils.deconv_output_length(input_shape[1].value, k_h, 1, s_h)
         out_w = utils.deconv_output_length(input_shape[2].value, k_w, 1, s_w)
-        out_shape = tf.stack( [ tf.shape(input_shape)[0], out_h, out_w, c_o/group  ] )
+        out_shape = tf.stack( [ tf.shape(input)[0], out_h, out_w, c_o/group  ] )
         #print "deconv: c_i=%d -> c_o=%d"%(c_i,c_o)," padding=",padding
         #print "out(h,w): ",out_h,out_w
         deconv = lambda i, k: tf.nn.conv2d_transpose(i, k, output_shape=out_shape, strides=stride_shape, padding=padding)
